@@ -69,3 +69,5 @@
                                  (insert (format "%s : Error\n\t%s\n" ,(first test) (second ,err))))))
                          (if (stringp (car body)) (cdr body) body))
                (list ,passed-count ,failed-count ,error-count))))))
+
+(provide 'testel)
