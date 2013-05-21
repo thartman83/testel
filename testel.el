@@ -30,16 +30,19 @@
   (when (not (string= str1 str2))
     (signal 'test-failed msg)))
 
+(defun test= (val1 val2 msg)
+	(when (not (= val1 val2))
+		(signal 'test-failed msg)))
+
 (defcustom default-output-buffer (get-buffer "*Messages*")
 	"Default output location for defunittest"
 	:type 'buffer)		
 
 (defmacro defunittest (test-name &rest body)
   `(defun ,test-name (&optional output-buffer)
-;		 "Test the foos"
-;     ,(if (stringp (car body)) ;; Quick test to see if a doc string was included
-;					(car body)
-;				"")
+     ,(if (stringp (car body)) ;; Quick test to see if a doc string was included
+					(car body)
+				"")
 		 (interactive)
      ,(let ((passed-count (gensym))
             (failed-count (gensym))
@@ -64,5 +67,5 @@
                                 (error 
                                  (incf ,error-count)
                                  (insert (format "%s : Error\n\t%s\n" ,(first test) (second ,err))))))
-                         body)               
+                         (if (stringp (car body)) (cdr body) body))
                (list ,passed-count ,failed-count ,error-count))))))
